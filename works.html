@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Works — Shahid Nazir Khan</title>
+<meta name="description" content="Every project by Shahid Nazir Khan (@rollnumberninee): architecture studies, heritage documentation, sketches, stop motion and video edits.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-works" data-bg-base=".35">
+
+<!-- fixed site background: black plastic texture, blurred further as you scroll -->
+<div class="site-bg" aria-hidden="true">
+  <div class="bg-layer bg-sharp"></div>
+  <div class="bg-layer bg-soft"></div>
+  <div class="bg-sheen"></div>
+  <div class="bg-tint"></div>
+  <div class="bg-dim"></div>
+  <div class="bg-grain"></div>
+</div>
+
+<!-- ───────── menubar ───────── -->
+<header class="menubar">
+  <a href="index.html" class="mark" aria-label="Home">9</a>
+  <span class="menubar-name">rollnumberninee</span>
+  <nav>
+    <a href="index.html" class="roll" data-t="Home"><span>Home</span></a>
+    <a href="works.html" class="roll is-here" data-t="My works" aria-current="page"><span>My works</span></a>
+    <a href="index.html#film" class="roll" data-t="Film"><span>Film</span></a>
+    <a href="index.html#contact" class="cta">Start a project</a>
+  </nav>
+  <span class="menubar-clock mono" id="clock" aria-hidden="true"></span>
+</header>
+
+<main>
+  <!-- ───────── page head ───────── -->
+  <section class="works-hero" id="top">
+    <a class="back mono" href="index.html">← Back to home</a>
+    <p class="mono kicker">[ Archive · ~/rollnumberninee/my-works ]</p>
+    <h1 class="works-title"><span class="line"><span>My</span></span><span class="line"><span>works<em>.</em></span></span></h1>
+    <div class="works-intro">
+      <p>Every project lives in a folder: studio sheets, case studies, heritage documentation, sketches, stop motion and edits. Open one to look through it.</p>
+      <ul class="works-stats mono">
+        <li class="reveal"><b class="count" data-to="projects">0</b> folders</li>
+        <li class="reveal"><b class="count" data-to="images">0</b> files</li>
+        <li class="reveal"><b class="count" data-to="reels">0</b> clips</li>
+      </ul>
+    </div>
+
+    <form class="search" id="search" role="search" autocomplete="off">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+      <input id="q" type="search" placeholder="Search folders — try kashmir, sketch, film" aria-label="Search folders">
+      <kbd class="mono">/</kbd>
+    </form>
+    <div class="chips" id="chips" role="group" aria-label="Filter folders">
+      <button class="chip" data-q="">All</button>
+      <button class="chip" data-q="architecture">Architecture</button>
+      <button class="chip" data-q="heritage">Heritage</button>
+      <button class="chip" data-q="kashmir">Kashmir</button>
+      <button class="chip" data-q="sketch">Sketch</button>
+      <button class="chip" data-q="film">Film</button>
+    </div>
+  </section>
+
+  <!-- ───────── the desktop, as a finder-style window ───────── -->
+  <section class="desk" id="desk" aria-label="Project folders">
+    <div class="desk-panel">
+      <div class="titlebar">
+        <span class="lights"><i class="light red"></i><i class="light amber"></i><i class="light green"></i></span>
+        <span class="mono path">~/rollnumberninee/my-works</span>
+        <span class="mono desk-count" id="deskCount"></span>
+      </div>
+      <div class="desk-body">
+        <p class="mono filter-state" id="filterState" hidden></p>
+        <div class="desktop" id="desktop"></div>
+        <p class="empty mono" id="empty" hidden>No folder by that name. Try “kashmir”, “sketch” or “film”.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── footer ───────── -->
+  <footer class="contact works-foot">
+    <p class="mono kicker">[ Like what you see? ]</p>
+    <h2>Let’s <em>collaborate!</em></h2>
+    <div class="contact-links">
+      <a class="pill" href="index.html#contact">Get in touch →</a>
+      <a class="pill pill-ghost" href="index.html">Back to home</a>
+    </div>
+    <div class="giant" aria-hidden="true">my works</div>
+    <div class="fine mono"><span>© <span id="year"></span> Shahid Nazir Khan</span><a href="#top">Back to top ↑</a></div>
+  </footer>
+</main>
+
+<!-- ───────── dock ───────── -->
+<nav class="dock" id="dock" aria-label="Quick open"></nav>
+
+<!-- ───────── folder window ───────── -->
+<div class="overlay" id="win" hidden>
+  <div class="window" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+    <div class="titlebar">
+      <span class="lights"><button class="light red" data-close aria-label="Close"></button><i class="light amber"></i><i class="light green"></i></span>
+      <span class="mono path" id="winPath"></span>
+      <button class="mono flip" id="flipBtn" hidden>▶ Play flipbook</button>
+    </div>
+    <div class="window-body">
+      <header class="window-head">
+        <h3 id="winTitle"></h3>
+        <p id="winDesc"></p>
+      </header>
+      <div class="flipbook" id="flipbook" hidden><img alt=""></div>
+      <div class="grid" id="winGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── lightbox ───────── -->
+<div class="lightbox" id="lb" hidden>
+  <button class="lb-btn lb-close" data-close aria-label="Close">✕</button>
+  <button class="lb-btn lb-prev" aria-label="Previous">←</button>
+  <figure><div class="lb-media" id="lbMedia"></div><figcaption class="mono" id="lbCap"></figcaption></figure>
+  <button class="lb-btn lb-next" aria-label="Next">→</button>
+</div>
+
+<script src="assets/manifest.js"></script>
+<script src="app.js"></script>
+<script src="cursor.js"></script>
+</body>
+</html>

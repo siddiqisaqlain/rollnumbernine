@@ -27,7 +27,7 @@
   <a href="#top" class="mark" aria-label="Home">9</a>
   <span class="menubar-name">rollnumberninee</span>
   <nav>
-    <a href="#selected" class="roll" data-t="Work"><span>Work</span></a>
+    <a href="works.html" class="roll" data-t="My works"><span>My works</span></a>
     <a href="#film" class="roll" data-t="Film"><span>Film</span></a>
     <a href="#about" class="roll" data-t="About"><span>About</span></a>
     <a href="#contact" class="cta">Start a project</a>
@@ -60,11 +60,12 @@
         I draw buildings, <em>document</em> heritage,<br>
         and cut it all into film.
       </p>
-      <form class="search" id="search" role="search" autocomplete="off">
+      <form class="search" id="search" role="search" autocomplete="off" action="works.html">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
-        <input id="q" type="search" placeholder="Search my work — try kashmir, sketch, film" aria-label="Search projects">
+        <input id="q" name="q" type="search" placeholder="Search my work — try kashmir, sketch, film" aria-label="Search projects">
         <kbd class="mono">/</kbd>
       </form>
+      <a class="hero-works" href="works.html"><span class="hw-dot"></span>Open My works <b>→</b></a>
     </div>
 
     <!-- showreel card, after daylight's hero video thumb -->
@@ -105,7 +106,7 @@
       <p class="mono kicker">[ 01 — Selected work ]</p>
       <h2>Featured <em>projects</em></h2>
     </div>
-    <p class="mono hint">Drag to browse, click a card to open it →</p>
+    <p class="mono hint">Drag to browse, click a card to open it · <a href="works.html">See all works ↗</a></p>
   </div>
   <div class="rail" id="rail"></div>
 </section>
@@ -122,34 +123,37 @@
 
 <!-- ───────── disciplines (palette band) ───────── -->
 <section class="bands" aria-label="Browse by discipline">
-  <button class="band band-black" data-filter="architecture">
+  <a class="band band-black" href="works.html?q=architecture">
     <span class="band-word">Architecture</span>
     <span class="band-meta mono">#000000<br>studies · sheets · sketches</span>
-  </button>
-  <button class="band band-violet" data-filter="film">
+  </a>
+  <a class="band band-violet" href="works.html?q=film">
     <span class="band-word">Film</span>
     <span class="band-meta mono">#7D39EB<br>edits · reels · stop motion</span>
-  </button>
-  <button class="band band-lime" data-filter="kashmir">
+  </a>
+  <a class="band band-lime" href="works.html?q=kashmir">
     <span class="band-word">Heritage</span>
     <span class="band-meta mono">#C6FF33<br>khanqah · pinjrakari · site</span>
-  </button>
-  <button class="band band-white" data-filter="">
+  </a>
+  <a class="band band-white" href="works.html">
     <span class="band-word">Everything</span>
     <span class="band-meta mono">#FFFFFF<br>open all folders</span>
-  </button>
+  </a>
 </section>
 
-<!-- ───────── work desktop ───────── -->
-<section class="work" id="work">
-  <div class="section-head">
-    <p class="mono kicker">[ 02 — Archive ]</p>
-    <h2>The desktop</h2>
-    <p class="section-sub">Every project lives in a folder. Open one to look through it.</p>
-    <p class="mono filter-state" id="filterState" hidden></p>
-  </div>
-  <div class="desktop" id="desktop"></div>
-  <p class="empty mono" id="empty" hidden>No folder by that name. Try “kashmir”, “sketch” or “film”.</p>
+<!-- ───────── my works call-to-action ───────── -->
+<section class="works-cta" id="work">
+  <a class="cta-panel" href="works.html">
+    <span class="cta-bar"><span class="lights"><i class="light red"></i><i class="light amber"></i><i class="light green"></i></span><span class="mono path">~/rollnumberninee/my-works</span></span>
+    <span class="cta-folders" id="ctaFolders" aria-hidden="true"></span>
+    <span class="cta-text">
+      <span class="mono kicker">[ 02 — Archive ]</span>
+      <span class="cta-title">My <em>works</em></span>
+      <span class="cta-sub">Every sheet, sketch, study and edit, sorted into folders on its own page.</span>
+      <span class="mono cta-count" id="ctaCount"></span>
+      <span class="cta-btn">Open My works <b>→</b></span>
+    </span>
+  </a>
 </section>
 
 <!-- ───────── film ───────── -->
