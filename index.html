@@ -12,6 +12,15 @@
 </head>
 <body>
 
+<!-- fixed site background: black plastic texture, sharp at the top, blurred as you scroll -->
+<div class="site-bg" aria-hidden="true">
+  <div class="bg-layer bg-sharp"></div>
+  <div class="bg-layer bg-soft"></div>
+  <div class="bg-tint"></div>
+  <div class="bg-dim"></div>
+  <div class="bg-grain"></div>
+</div>
+
 <!-- ───────── menubar ───────── -->
 <header class="menubar">
   <a href="#top" class="mark" aria-label="Home">9</a>
@@ -230,6 +239,7 @@
 <script src="assets/manifest.js"></script>
 <script src="app.js"></script>
 <script src="cursor.js"></script>
+<script src="assets/bg/plastic-tex.js"></script>
 <script src="glass.js"></script>
 </body>
 </html>

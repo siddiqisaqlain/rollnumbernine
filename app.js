@@ -318,6 +318,18 @@ if (matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').mat
 }
 $('#showreel').addEventListener('click', () => openLightbox(M.reels, 0, 'Showreel', true));
 
+// ── site background: blur in over the first ~60% of a screen of scrolling ──
+{
+  const root = document.documentElement;
+  let queued = false;
+  const update = () => {
+    queued = false;
+    root.style.setProperty('--bg-blur', Math.min(1, scrollY / (innerHeight * .6)).toFixed(3));
+  };
+  addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+}
+
 // ── chrome ──
 const clock = $('#clock');
 const tickClock = () => { clock.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); };

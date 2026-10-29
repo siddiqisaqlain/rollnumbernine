@@ -14,8 +14,21 @@ uniform vec2 uRes;
 uniform float uTime;
 uniform vec2 uLight;
 uniform float uFlute;
+uniform sampler2D uTex;
+uniform float uHasTex;
+uniform vec4 uCover;     // fixed background image rect on screen, in CSS px: x, y, w, h
+uniform vec3 uFrame;     // canvas left, top (CSS px), device pixel ratio
 
 float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+
+// the black plastic, sampled where the fixed site background sits, graded to the palette
+vec3 plastic(vec2 p){
+  vec2 css = vec2(uFrame.x + p.x / uFrame.z, uFrame.y + (uRes.y - p.y) / uFrame.z);
+  vec2 tuv = (css - uCover.xy) / uCover.zw;
+  float l = dot(texture2D(uTex, tuv).rgb, vec3(0.30, 0.59, 0.11));
+  l = clamp((l - 0.06) * 1.2, 0.0, 1.0);
+  return mix(vec3(0.0), vec3(0.62, 0.52, 0.86), l) * 0.55 * uHasTex;
+}
 
 // the light field behind the glass, in pixel coords
 vec3 scene(vec2 p){
@@ -23,7 +36,7 @@ vec3 scene(vec2 p){
   float asp = uRes.x / uRes.y;
   vec2 q = vec2(uv.x * asp, uv.y);
   float t = uTime;
-  vec3 col = vec3(0.010, 0.008, 0.018);
+  vec3 col = vec3(0.010, 0.008, 0.018) + plastic(p);
 
   // violet bloom rising from the bottom
   vec2 c1 = vec2(uLight.x * asp, 0.02 + 0.04 * sin(t * 0.40));
@@ -121,6 +134,37 @@ void main(){
 
   const U = n => gl.getUniformLocation(prog, n);
   const uRes = U('uRes'), uTime = U('uTime'), uLight = U('uLight'), uFlute = U('uFlute');
+  const uHasTex = U('uHasTex'), uCover = U('uCover'), uFrame = U('uFrame');
+
+  // plastic texture (embedded data URI, so it isn't blocked on file://)
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
+  ['TEXTURE_WRAP_S', 'TEXTURE_WRAP_T'].forEach(k => gl.texParameteri(gl.TEXTURE_2D, gl[k], gl.CLAMP_TO_EDGE));
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.uniform1i(U('uTex'), 0);
+  let texW = 1, texH = 1, hasTex = 0;
+  if (window.PLASTIC_TEX) {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        texW = img.naturalWidth; texH = img.naturalHeight; hasTex = 1;
+        draw(last);
+      } catch (err) { console.warn('glass texture:', err); }
+    };
+    img.src = window.PLASTIC_TEX;
+  }
+
+  // mirror the CSS of .bg-layer: inset -48px, background-size cover, centred
+  const BLEED = 48;
+  function cover() {
+    const lw = innerWidth + BLEED * 2, lh = innerHeight + BLEED * 2;
+    const s = Math.max(lw / texW, lh / texH), dw = texW * s, dh = texH * s;
+    return [-BLEED + (lw - dw) / 2, -BLEED + (lh - dh) / 2, dw, dh];
+  }
 
   let dpr = 1;
   const resize = () => {
@@ -150,6 +194,10 @@ void main(){
     gl.uniform1f(uTime, t);
     gl.uniform2f(uLight, light.x, light.y);
     gl.uniform1f(uFlute, Math.max(14, Math.round((innerWidth < 640 ? 20 : 30) * dpr)));
+    const r = cv.getBoundingClientRect();
+    gl.uniform1f(uHasTex, hasTex);
+    gl.uniform4f(uCover, ...cover());
+    gl.uniform3f(uFrame, r.left, r.top, dpr);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
   function loop(now) {
