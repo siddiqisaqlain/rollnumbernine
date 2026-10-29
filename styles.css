@@ -85,13 +85,23 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
   display: grid; align-items: end;
   padding: clamp(28px, 5vw, 72px) clamp(18px, 4vw, 56px);
   min-height: 560px;
-}
-.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hero-shade {
-  position: absolute; inset: 0;
+  /* fallback when WebGL is unavailable: flutes over a violet bloom */
   background:
-    linear-gradient(180deg, rgba(10,10,11,.35) 0%, rgba(10,10,11,.15) 40%, rgba(10,10,11,.92) 100%),
-    radial-gradient(80% 60% at 15% 90%, rgba(125,57,235,.35), transparent 70%);
+    repeating-linear-gradient(90deg, rgba(255,255,255,.07) 0 2px, transparent 2px 26px, rgba(0,0,0,.35) 28px 30px),
+    radial-gradient(45% 30% at 70% 100%, #ffe9ff 0%, #ff6fd6 25%, transparent 70%),
+    radial-gradient(70% 75% at 70% 108%, #7d39eb 0%, rgba(125,57,235,.4) 45%, transparent 75%),
+    #050408;
+}
+.hero-frame::after {             /* glass pane edge */
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,.28), inset 0 -40px 80px -40px rgba(0,0,0,.6);
+}
+.hero-glass { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero-shade {                    /* keeps the name legible on the left */
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(5,4,8,.72) 0%, rgba(5,4,8,.4) 38%, rgba(5,4,8,0) 62%),
+    linear-gradient(180deg, rgba(5,4,8,.25) 0%, rgba(5,4,8,0) 30%);
 }
 .hero-inner { position: relative; max-width: 1200px; }
 .hero-name {
