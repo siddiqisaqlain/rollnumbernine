@@ -14,6 +14,7 @@ uniform vec2 uRes;
 uniform float uTime;
 uniform vec2 uLight;
 uniform float uFlute;
+uniform float uShift;    // how far the flutes have slid sideways (device px)
 uniform sampler2D uTex;
 uniform float uHasTex;
 uniform vec4 uCover;     // fixed background image rect on screen, in CSS px: x, y, w, h
@@ -73,12 +74,13 @@ vec3 scene(vec2 p){
 void main(){
   vec2 p = gl_FragCoord.xy;
   float w = uFlute;
-  float idx = floor(p.x / w);
-  float c = fract(p.x / w) - 0.5;                    // -0.5 .. 0.5 across one flute
-  float center = (idx + 0.5) * w;
+  float xs = p.x + uShift;                           // the pane slides; the light behind it stays put
+  float idx = floor(xs / w);
+  float c = fract(xs / w) - 0.5;                     // -0.5 .. 0.5 across one flute
+  float center = (idx + 0.5) * w - uShift;
 
   // convex lens: inverted, magnified slice, tiny per-flute irregularity like real cast glass
-  float k = -2.3 + (hash(vec2(idx, 3.0)) - 0.5) * 0.18;
+  float k = -2.3 + (hash(vec2(mod(idx, 84.0), 3.0)) - 0.5) * 0.18;   // repeats with the shift wrap
   float sy = p.y + c * c * w * 1.4;                  // slight bow toward the edges
 
   vec3 col;
@@ -140,7 +142,9 @@ void main(){
   const U = n => gl.getUniformLocation(prog, n);
   const uRes = U('uRes'), uTime = U('uTime'), uLight = U('uLight'), uFlute = U('uFlute');
   const uHasTex = U('uHasTex'), uCover = U('uCover'), uFrame = U('uFrame');
-  const uInv = U('uInv'), uMove = U('uMove');
+  const uInv = U('uInv'), uMove = U('uMove'), uShift = U('uShift');
+  const FLUTE_SPEED = 40;      // CSS px per second, constant
+  const SCROLL_PUSH = .6;      // extra px of slide per px scrolled
   const bgLayer = document.querySelector('.bg-sharp');
 
   // current transform of the drifting background layer (CSS animation + scroll `translate`)
@@ -206,7 +210,7 @@ void main(){
   });
   frame.addEventListener('pointerleave', () => { target.x = .56; target.y = .5; });
 
-  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const calm = false;          // the moving glass is part of the design; it always runs
   const t0 = performance.now();
   let last = 0, raf = 0, visible = true;
 
@@ -214,7 +218,10 @@ void main(){
     gl.uniform2f(uRes, cv.width, cv.height);
     gl.uniform1f(uTime, t);
     gl.uniform2f(uLight, light.x, light.y);
-    gl.uniform1f(uFlute, Math.max(14, Math.round((innerWidth < 640 ? 20 : 30) * dpr)));
+    const fw = Math.max(14, Math.round((innerWidth < 640 ? 20 : 30) * dpr));
+    gl.uniform1f(uFlute, fw);
+    // wrap after exactly 84 flutes: invisible, and keeps float precision from degrading
+    gl.uniform1f(uShift, ((t * FLUTE_SPEED + scrollY * SCROLL_PUSH) * dpr) % (fw * 84));
     const r = cv.getBoundingClientRect();
     gl.uniform1f(uHasTex, hasTex);
     gl.uniform4f(uCover, ...cover());

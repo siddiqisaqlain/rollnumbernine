@@ -44,15 +44,24 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
   position: absolute; inset: -48px;               /* bleed so the blur and drift have no hard edges */
   background: url("assets/bg/plastic.jpg") center / cover no-repeat;
   translate: 0 calc(var(--bg-py, 0) * 1px);       /* scroll parallax (kept separate from the drift) */
-  animation: bgDrift 26s ease-in-out infinite alternate;
+  animation: bgOrbit 24s linear infinite;
   will-change: transform;
 }
-/* slow pan / zoom / tilt; alternate makes the loop seamless */
-@keyframes bgDrift {
-  0%   { transform: translate3d(0, 0, 0)          scale(1.07) rotate(0deg); }
-  35%  { transform: translate3d(-2.2%, 1.4%, 0)   scale(1.12) rotate(-1.1deg); }
-  70%  { transform: translate3d(1.2%, 2%, 0)      scale(1.09) rotate(.6deg); }
-  100% { transform: translate3d(1.8%, -1.6%, 0)   scale(1.1)  rotate(1deg); }
+/* constant-speed orbit: 12 points on a circle, linear timing, ends where it starts */
+@keyframes bgOrbit {
+  0%      { transform: translate3d(2.6%, 0, 0)          scale(1.12) rotate(0deg); }
+  8.333%  { transform: translate3d(2.25%, 1.3%, 0)      scale(1.12) rotate(.5deg); }
+  16.667% { transform: translate3d(1.3%, 2.25%, 0)      scale(1.12) rotate(.87deg); }
+  25%     { transform: translate3d(0, 2.6%, 0)          scale(1.12) rotate(1deg); }
+  33.333% { transform: translate3d(-1.3%, 2.25%, 0)     scale(1.12) rotate(.87deg); }
+  41.667% { transform: translate3d(-2.25%, 1.3%, 0)     scale(1.12) rotate(.5deg); }
+  50%     { transform: translate3d(-2.6%, 0, 0)         scale(1.12) rotate(0deg); }
+  58.333% { transform: translate3d(-2.25%, -1.3%, 0)    scale(1.12) rotate(-.5deg); }
+  66.667% { transform: translate3d(-1.3%, -2.25%, 0)    scale(1.12) rotate(-.87deg); }
+  75%     { transform: translate3d(0, -2.6%, 0)         scale(1.12) rotate(-1deg); }
+  83.333% { transform: translate3d(1.3%, -2.25%, 0)     scale(1.12) rotate(-.87deg); }
+  91.667% { transform: translate3d(2.25%, -1.3%, 0)     scale(1.12) rotate(-.5deg); }
+  100%    { transform: translate3d(2.6%, 0, 0)          scale(1.12) rotate(0deg); }
 }
 .bg-sharp { filter: grayscale(1) contrast(1.18) brightness(.8); }
 .bg-soft {
@@ -63,13 +72,12 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 .bg-sheen {
   position: absolute; inset: 0; mix-blend-mode: overlay; pointer-events: none;
   background: linear-gradient(112deg, transparent 38%, rgba(255,255,255,.0) 42%, rgba(255,255,255,.55) 50%, rgba(255,255,255,0) 58%, transparent 62%) 0 0 / 300% 100% no-repeat;
-  animation: sheen 11s cubic-bezier(.45,0,.25,1) infinite;
+  animation: sheen 9s linear infinite;
   opacity: calc(1 - var(--bg-blur, 0) * .5);
 }
-@keyframes sheen {
-  0%   { background-position: 110% 0; }
-  55%  { background-position: -10% 0; }          /* band is off-screen at both ends, so the jump is invisible */
-  100% { background-position: -10% 0; }
+@keyframes sheen {                                /* band is off-screen at both ends, so the wrap is invisible */
+  from { background-position: 115% 0; }
+  to   { background-position: -15% 0; }
 }
 /* palette grade: tints the plastic's highlights violet, with a hint of lime; black stays black */
 .bg-tint {
@@ -607,6 +615,10 @@ html[data-custom-cursor], html[data-custom-cursor] * { cursor: none !important; 
 .cur-trail { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; }
 
 @media (prefers-reduced-motion: reduce) {
+  /* the moving background is a deliberate part of the design, so it keeps running */
+  .site-bg .bg-layer { animation: bgOrbit 24s linear infinite !important; }
+  .site-bg .bg-sheen { animation: sheen 9s linear infinite !important; }
+  .site-bg .bg-tint  { animation: tintDrift 34s ease-in-out infinite alternate !important; }
   .reveal { opacity: 1; transform: none; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
