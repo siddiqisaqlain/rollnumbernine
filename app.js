@@ -218,18 +218,8 @@ if (desktop) {
   q.value = new URLSearchParams(location.search).get('q') || '';
   applyFilter(q.value, { push: false });
 
-  // second ring: the same folders, empty, turning the opposite way
-  const emptySet = $('#emptySet');
-  if (emptySet) {
-    emptySet.innerHTML = PROJECTS.map(() => `
-      <div class="folder folder-empty">
-        <span class="f-icon"><span class="f-back"></span><span class="f-front"></span></span>
-      </div>`).join('');
-  }
-
   const orbit = $('#orbit');
   if (orbit) runOrbit(orbit, desktop, 1);
-  if (emptySet) runOrbit($('#orbit2'), emptySet, -1);
 
   // dock: a mini cover per folder, magnifies on hover
   const dock = $('#dock');
@@ -299,6 +289,32 @@ function runOrbit(orbit, set, dir) {
     };
     requestAnimationFrame(frame);
   }
+}
+
+// ── landing: ring of video edits, turning opposite to the My Works ring ──
+const reelSet = $('#reelSet');
+if (reelSet) {
+  reelSet.innerHTML = M.reels.map((r, i) => {
+    const n = String(i + 1).padStart(2, '0');
+    return `
+    <button class="folder folder-reel" data-i="${i}" aria-label="Watch edit ${n}">
+      <span class="f-icon">
+        <span class="f-back"></span>
+        <span class="f-paper p1 f-vid"><video src="${r.src}#t=0.5" muted loop playsinline preload="metadata"></video></span>
+        <span class="f-front"><span class="f-tag">Edit ${n}</span><span class="f-count">▶ play</span></span>
+      </span>
+      <span class="f-label"><strong>Edit ${n}</strong><span>Video edit</span></span>
+    </button>`;
+  }).join('');
+  reelSet.addEventListener('click', e => {
+    const f = e.target.closest('.folder-reel');
+    if (f) openLightbox(M.reels, +f.dataset.i, 'My video editing work', true);
+  });
+  // previews play only while the ring is on screen
+  const vids = [...reelSet.querySelectorAll('video')];
+  new IntersectionObserver(([en]) => vids.forEach(v => en.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: .15 })
+    .observe($('#reelOrbit'));
+  runOrbit($('#reelOrbit'), reelSet, -1);
 }
 
 // ── landing: My Works call-to-action ──

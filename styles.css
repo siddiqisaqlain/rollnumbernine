@@ -729,8 +729,19 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 .orbit .folder .f-label { text-align: center; text-shadow: 0 2px 12px rgba(0,0,0,.8); }
 .orbit .empty { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; }
 .orbit-set { position: absolute; inset: 0; }
-.desk-2 { margin-top: -90px; padding-top: 0; padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)); }   /* room for the dock */
-.folder-empty .f-front { justify-content: center; }
+.page-works .desk { padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)); }   /* room for the dock */
+
+/* landing: ring of video edits */
+.reel-ring { padding: clamp(56px, 7vw, 96px) var(--gutter) 0; }
+.reel-ring .section-head { margin-bottom: 0; }
+.reel-ring .kicker { margin: 0; }
+.folder-reel .f-vid {
+  left: 21%; width: 58%; top: -30%;               /* stands well out of the folder so the edit is visible */
+  transform: rotate(-3deg); overflow: hidden; background: #111;
+  border: 2px solid rgba(255,255,255,.85); border-radius: 8px;
+}
+.folder-reel .f-vid video { width: 100%; height: 100%; object-fit: cover; }
+.folder-reel:hover .f-paper.f-vid { transform: translateY(-18%) rotate(0deg) scale(1.1); }
 .orbit .folder .f-label { transition: opacity .3s; }
 @media (max-width: 640px) {
   .orbit { height: 620px; }
