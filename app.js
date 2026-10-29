@@ -218,6 +218,49 @@ if (desktop) {
   q.value = new URLSearchParams(location.search).get('q') || '';
   applyFilter(q.value, { push: false });
 
+  // folders orbit on a 3D ellipse at a constant speed; hovering one eases the ring to a stop
+  const orbit = $('#orbit');
+  if (orbit) {
+    const LAP = 45;                                   // seconds per revolution
+    let angle = 0, speed = 1, target = 1, held = null, last = performance.now();
+    desktop.querySelectorAll('.folder').forEach(el => {
+      const hold = () => { held = el; target = 0; };
+      const release = () => { if (held === el) held = null; target = held ? 0 : 1; };
+      el.addEventListener('mouseenter', hold);
+      el.addEventListener('mouseleave', release);
+      el.addEventListener('focus', hold);
+      el.addEventListener('blur', release);
+    });
+    const frame = now => {
+      const dt = Math.min(.05, (now - last) / 1000); last = now;
+      speed += (target - speed) * Math.min(1, dt * 5);      // ease in/out of the stop
+      angle += speed * dt * Math.PI * 2 / LAP;
+      const els = [...desktop.querySelectorAll('.folder:not([hidden])')];
+      const n = els.length, W = orbit.clientWidth, H = orbit.clientHeight;
+      const narrow = W < 640;
+      const fw = narrow ? 112 : W < 1000 ? 170 : 210;
+      // phones get a taller, narrower ellipse so nine folders still have room
+      const rx = narrow ? W * .34 : Math.min(W * .42 - fw * .25, 600);
+      const ry = narrow ? H * .3 : Math.min(H * .27, rx * .4);
+      orbit.style.setProperty('--fw', fw + 'px');
+      orbit.style.setProperty('--rx', rx.toFixed(0));
+      orbit.style.setProperty('--ry', ry.toFixed(0));
+      orbit.style.setProperty('--track-dy', (fw * .3).toFixed(0));
+      els.forEach((el, i) => {
+        const a = n === 1 ? Math.PI / 2 : angle + i * Math.PI * 2 / n;
+        const z = Math.sin(a), d = (z + 1) / 2;              // d: 0 at the back, 1 at the front
+        const x = Math.cos(a) * rx, y = z * ry;
+        const s = .5 + .5 * d;
+        el.style.transform = `translate(-50%, -50%) translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${s.toFixed(3)})`;
+        el.style.zIndex = el === held ? 200 : Math.round(d * 100);
+        el.style.opacity = el === held ? 1 : (.32 + .68 * d).toFixed(2);
+        el.classList.toggle('is-back', d < .45 && el !== held);
+      });
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+
   // dock: a mini cover per folder, magnifies on hover
   const dock = $('#dock');
   dock.innerHTML = PROJECTS.map(p => {

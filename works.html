@@ -65,19 +65,17 @@
     </div>
   </section>
 
-  <!-- ───────── the desktop, as a finder-style window ───────── -->
+  <!-- ───────── the folders, orbiting on a 3D ellipse ───────── -->
   <section class="desk" id="desk" aria-label="Project folders">
-    <div class="desk-panel">
-      <div class="titlebar">
-        <span class="lights"><i class="light red"></i><i class="light amber"></i><i class="light green"></i></span>
-        <span class="mono path">~/rollnumberninee/my-works</span>
-        <span class="mono desk-count" id="deskCount"></span>
-      </div>
-      <div class="desk-body">
-        <p class="mono filter-state" id="filterState" hidden></p>
-        <div class="desktop" id="desktop"></div>
-        <p class="empty mono" id="empty" hidden>No folder by that name. Try “kashmir”, “sketch” or “film”.</p>
-      </div>
+    <div class="orbit-meta mono">
+      <span id="deskCount"></span>
+      <span class="dim">Hover a folder to stop it · click to open</span>
+    </div>
+    <p class="mono filter-state" id="filterState" hidden></p>
+    <div class="orbit" id="orbit">
+      <i class="orbit-track" aria-hidden="true"></i>
+      <div class="desktop" id="desktop"></div>
+      <p class="empty mono" id="empty" hidden>No folder by that name. Try “kashmir”, “sketch” or “film”.</p>
     </div>
   </section>
 
