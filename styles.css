@@ -118,16 +118,13 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 .menubar-name { font-weight: 700; }
 .menubar nav { display: flex; align-items: center; gap: 22px; margin-left: auto; }
 .menubar nav a { text-decoration: none; color: #d6d6dc; }
-/* letter-roll hover: the label slides up and a copy rolls in from below */
-.roll { position: relative; display: inline-block; overflow: hidden; height: 1.3em; line-height: 1.3em; }
-.roll span, .roll::after { display: block; transition: transform .45s cubic-bezier(.7,0,.2,1); }
-.roll::after { content: attr(data-t); position: absolute; left: 0; top: 100%; color: var(--lime); }
-.roll:hover span, .roll:hover::after { transform: translateY(-100%); }
 .menubar nav .cta {
   padding: 7px 14px; border-radius: 999px; background: var(--lime); color: var(--black);
   font-weight: 700; transition: background .2s, transform .2s;
 }
 .menubar nav .cta:hover { background: var(--white); transform: translateY(-1px); }
+.menubar nav { gap: 10px; }
+.menubar nav .cta.is-here { background: var(--white); }      /* the page you're on */
 .menubar-clock { font-size: 12px; color: var(--muted); min-width: 4.5em; text-align: right; }
 @media (max-width: 640px) {
   .menubar-name, .menubar-clock { display: none; }
@@ -599,7 +596,6 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 
 /* ── landing: links into My Works ── */
 .band { text-decoration: none; }
-.roll.is-here span { color: var(--lime); }
 .hint a { color: var(--lime); text-decoration: none; }
 .hint a:hover { text-decoration: underline; }
 .hero-works {
@@ -785,7 +781,11 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 }
 .dock-item:hover .dock-tip { opacity: 1; }
 @media (max-width: 760px) { .dock { display: none; } .works-foot { padding-bottom: 40px; } }
-@media (max-width: 480px) { .menubar nav .cta { display: none; } }
+@media (max-width: 560px) {
+  .menubar nav { gap: 6px; }
+  .menubar nav .cta { padding: 6px 11px; font-size: 13px; }
+}
+@media (max-width: 420px) { .menubar nav .cta-start { display: none; } }
 
 /* ── custom cursor + crystal trail ── */
 html[data-custom-cursor], html[data-custom-cursor] * { cursor: none !important; }
