@@ -50,12 +50,13 @@ const PROJECTS = [
     tags: 'stop motion animation film video frames sketch',
   },
   {
-    id: 'reels', title: 'Edits & reels', tag: 'Film', video: true,
+    // videos are kept in the repo but not shown anywhere for now; drop `hidden` to bring the folder back
+    id: 'reels', title: 'Edits & reels', tag: 'Film', video: true, hidden: true,
     sub: 'Video editing',
     desc: 'Short edits from site visits and heritage documentation.',
     tags: 'film video editing reels edits premiere motion kashmir',
   },
-];
+].filter(p => !p.hidden);
 
 const M = window.MANIFEST;
 const $ = (s, el = document) => el.querySelector(s);
@@ -291,29 +292,14 @@ function runOrbit(orbit, set, dir) {
   }
 }
 
-// ── landing: ring of video edits, turning opposite to the My Works ring ──
+// ── landing: video editing ring, turning opposite to the My Works ring ──
+// empty for now; the edits stay in assets/video until they're added back
 const reelSet = $('#reelSet');
 if (reelSet) {
-  reelSet.innerHTML = M.reels.map((r, i) => {
-    const n = String(i + 1).padStart(2, '0');
-    return `
-    <button class="folder folder-reel" data-i="${i}" aria-label="Watch edit ${n}">
-      <span class="f-icon">
-        <span class="f-back"></span>
-        <span class="f-paper p1 f-vid"><video src="${r.src}#t=0.5" muted loop playsinline preload="metadata"></video></span>
-        <span class="f-front"><span class="f-tag">Edit ${n}</span><span class="f-count">▶ play</span></span>
-      </span>
-      <span class="f-label"><strong>Edit ${n}</strong><span>Video edit</span></span>
-    </button>`;
-  }).join('');
-  reelSet.addEventListener('click', e => {
-    const f = e.target.closest('.folder-reel');
-    if (f) openLightbox(M.reels, +f.dataset.i, 'My video editing work', true);
-  });
-  // previews play only while the ring is on screen
-  const vids = [...reelSet.querySelectorAll('video')];
-  new IntersectionObserver(([en]) => vids.forEach(v => en.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: .15 })
-    .observe($('#reelOrbit'));
+  reelSet.innerHTML = Array.from({ length: 9 }, () => `
+    <div class="folder folder-empty">
+      <span class="f-icon"><span class="f-back"></span><span class="f-front"></span></span>
+    </div>`).join('');
   runOrbit($('#reelOrbit'), reelSet, -1);
 }
 
@@ -321,7 +307,7 @@ if (reelSet) {
 const ctaFolders = $('#ctaFolders');
 if (ctaFolders) {
   ctaFolders.innerHTML = ['casestudy', 'khanqah', 'pinjrakari'].map((id, i) => `<span class="cta-folder cf-${i + 1}">${folderIcon(project(id))}</span>`).join('');
-  $('#ctaCount').textContent = `${totals.projects} folders · ${totals.images} files · ${totals.reels} clips`;
+  $('#ctaCount').textContent = `${totals.projects} folders · ${totals.images} files`;
 }
 
 // ── film section ──
@@ -399,7 +385,7 @@ if (svc) {
     b.addEventListener('mouseenter', () => { preview.src = M[id][n].thumb; preview.classList.add('on'); });
     b.addEventListener('mouseleave', () => preview.classList.remove('on'));
     b.addEventListener('click', () => {
-      if (id === 'field') return $('#film').scrollIntoView();
+      if (id === 'field') return $('#editing').scrollIntoView();
       openWindow(id);
     });
   });
