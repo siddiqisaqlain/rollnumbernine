@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shahid Nazir Khan — Architecture &amp; Film</title>
+<meta name="description" content="Portfolio of Shahid Nazir Khan (@rollnumberninee): architecture student and video editor from Kashmir.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ───────── menubar ───────── -->
+<header class="menubar">
+  <a href="#top" class="mark" aria-label="Home">9</a>
+  <span class="menubar-name">rollnumberninee</span>
+  <nav>
+    <a href="#selected" class="roll" data-t="Work"><span>Work</span></a>
+    <a href="#film" class="roll" data-t="Film"><span>Film</span></a>
+    <a href="#about" class="roll" data-t="About"><span>About</span></a>
+    <a href="#contact" class="cta">Start a project</a>
+  </nav>
+  <span class="menubar-clock mono" id="clock" aria-hidden="true"></span>
+</header>
+
+<!-- ───────── hero ───────── -->
+<section class="hero" id="top">
+  <div class="hero-frame">
+    <video class="hero-video" src="assets/video/hero.mp4" autoplay muted loop playsinline></video>
+    <div class="hero-shade"></div>
+
+    <!-- floating work, after studio loop's collage -->
+    <div class="floaters" id="floaters" aria-hidden="true">
+      <img class="fl fl-1" data-depth="18" src="assets/pinjrakari/pinjrakari-01-t.jpg" alt="">
+      <img class="fl fl-2" data-depth="32" src="assets/casestudy/casestudy-01-t.jpg" alt="">
+      <img class="fl fl-3" data-depth="12" src="assets/khanqah/khanqah-01-t.jpg" alt="">
+      <img class="fl fl-4" data-depth="26" src="assets/abstraction/abstraction-01-t.jpg" alt="">
+      <img class="fl fl-5" data-depth="40" src="assets/progress/progress-01-t.jpg" alt="">
+    </div>
+
+    <div class="hero-inner">
+      <p class="mono kicker">[ Portfolio · AR-24-09 ]</p>
+      <h1 class="hero-name">
+        <span class="line"><span>Shahid</span></span>
+        <span class="line"><span>Nazir Khan</span></span>
+      </h1>
+      <p class="hero-role">
+        I draw buildings, <em>document</em> heritage,<br>
+        and cut it all into film.
+      </p>
+      <form class="search" id="search" role="search" autocomplete="off">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+        <input id="q" type="search" placeholder="Search my work — try kashmir, sketch, film" aria-label="Search projects">
+        <kbd class="mono">/</kbd>
+      </form>
+    </div>
+
+    <!-- showreel card, after daylight's hero video thumb -->
+    <button class="showreel" id="showreel" aria-label="Play showreel">
+      <video src="assets/video/reel-01.mp4#t=1" muted loop playsinline autoplay preload="metadata"></video>
+      <span class="showreel-play">▶</span>
+      <span class="showreel-label mono">Showreel · 05 edits</span>
+    </button>
+  </div>
+
+  <!-- meta row, after hadiya's hero footer -->
+  <div class="hero-meta mono">
+    <div><span class="dim">Architecture &amp; video editing</span><br>Kashmir, India</div>
+    <a href="#selected" class="scroll-line"><span>Scroll</span><i></i></a>
+    <div class="right"><span class="dim">Portfolio 2026</span><br><b class="dot"></b> Open to work</div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track mono">
+    <span>Architecture</span><i>✦</i><span>Video editing</span><i>✦</i><span>Heritage documentation</span><i>✦</i><span>Stop motion</span><i>✦</i><span>Case studies</span><i>✦</i><span>Hand sketching</span><i>✦</i>
+    <span>Architecture</span><i>✦</i><span>Video editing</span><i>✦</i><span>Heritage documentation</span><i>✦</i><span>Stop motion</span><i>✦</i><span>Case studies</span><i>✦</i><span>Hand sketching</span><i>✦</i>
+  </div>
+</div>
+
+<!-- ───────── stats ───────── -->
+<section class="stats" aria-label="In numbers">
+  <div class="stat reveal"><b class="count" data-to="projects">0</b><span class="mono">projects</span></div>
+  <div class="stat reveal"><b class="count" data-to="images">0</b><span class="mono">sheets, sketches &amp; photos</span></div>
+  <div class="stat reveal"><b class="count" data-to="reels">0</b><span class="mono">video edits</span></div>
+  <div class="stat reveal"><b class="count" data-to="frames">0</b><span class="mono">hand-drawn frames</span></div>
+</section>
+
+<!-- ───────── selected work (drag carousel) ───────── -->
+<section class="selected" id="selected">
+  <div class="section-head row">
+    <div>
+      <p class="mono kicker">[ 01 — Selected work ]</p>
+      <h2>Featured <em>projects</em></h2>
+    </div>
+    <p class="mono hint">Drag to browse, click a card to open it →</p>
+  </div>
+  <div class="rail" id="rail"></div>
+</section>
+
+<!-- ───────── services (numbered list) ───────── -->
+<section class="services" id="services">
+  <div class="section-head">
+    <p class="mono kicker">[ What I do ]</p>
+    <h2>Two careers, <em>one eye.</em></h2>
+  </div>
+  <ol class="svc" id="svc"></ol>
+  <img class="svc-preview" id="svcPreview" alt="" aria-hidden="true">
+</section>
+
+<!-- ───────── disciplines (palette band) ───────── -->
+<section class="bands" aria-label="Browse by discipline">
+  <button class="band band-black" data-filter="architecture">
+    <span class="band-word">Architecture</span>
+    <span class="band-meta mono">#000000<br>studies · sheets · sketches</span>
+  </button>
+  <button class="band band-violet" data-filter="film">
+    <span class="band-word">Film</span>
+    <span class="band-meta mono">#7D39EB<br>edits · reels · stop motion</span>
+  </button>
+  <button class="band band-lime" data-filter="kashmir">
+    <span class="band-word">Heritage</span>
+    <span class="band-meta mono">#C6FF33<br>khanqah · pinjrakari · site</span>
+  </button>
+  <button class="band band-white" data-filter="">
+    <span class="band-word">Everything</span>
+    <span class="band-meta mono">#FFFFFF<br>open all folders</span>
+  </button>
+</section>
+
+<!-- ───────── work desktop ───────── -->
+<section class="work" id="work">
+  <div class="section-head">
+    <p class="mono kicker">[ 02 — Archive ]</p>
+    <h2>The desktop</h2>
+    <p class="section-sub">Every project lives in a folder. Open one to look through it.</p>
+    <p class="mono filter-state" id="filterState" hidden></p>
+  </div>
+  <div class="desktop" id="desktop"></div>
+  <p class="empty mono" id="empty" hidden>No folder by that name. Try “kashmir”, “sketch” or “film”.</p>
+</section>
+
+<!-- ───────── film ───────── -->
+<section class="film" id="film">
+  <div class="section-head">
+    <p class="mono kicker">[ 03 — Video editing ]</p>
+    <h2>Cut, timed, <em>told.</em></h2>
+    <p class="section-sub">Short edits from site visits and heritage documentation, put together in Premiere Pro. Hover to preview, click to watch with sound.</p>
+  </div>
+  <div class="reels" id="reels"></div>
+</section>
+
+<!-- ───────── process ───────── -->
+<section class="process" aria-label="Process">
+  <div class="section-head">
+    <p class="mono kicker">[ How I work ]</p>
+    <h2>From site <em>to screen.</em></h2>
+  </div>
+  <ol class="steps">
+    <li class="reveal"><span class="mono">01</span><b>Observe</b><p>Walk the site and sketch it by hand before anything else.</p></li>
+    <li class="reveal"><span class="mono">02</span><b>Abstract</b><p>Strip the form down to what actually matters.</p></li>
+    <li class="reveal"><span class="mono">03</span><b>Design</b><p>Develop it on progress sheets, from bubble diagrams to plans.</p></li>
+    <li class="reveal"><span class="mono">04</span><b>Document</b><p>Photograph, map and film the work and the place.</p></li>
+    <li class="reveal"><span class="mono">05</span><b>Edit</b><p>Cut it into posts and films people actually watch.</p></li>
+  </ol>
+</section>
+
+<!-- ───────── about ───────── -->
+<section class="about" id="about">
+  <div class="about-num" aria-hidden="true">9</div>
+  <div class="about-body">
+    <p class="mono kicker">[ 04 — About ]</p>
+    <h2>Roll number nine.</h2>
+    <p>I’m Shahid Nazir Khan, an architecture student from Kashmir. I think on paper first, with hand sketches, abstractions and progress sheets, and then I take the work out to the street. I photograph, film and edit what I find, from the timber khanqahs of Pampore to the lattice craft of pinjrakari.</p>
+    <p>Architecture teaches me how a space is put together. Editing teaches me how to show it to someone else. This portfolio is where the two meet.</p>
+    <ul class="skills mono">
+      <li>Architectural design</li>
+      <li>Case-study analysis</li>
+      <li>Hand sketching</li>
+      <li>Heritage documentation</li>
+      <li>Video editing · Premiere Pro</li>
+      <li>Stop motion</li>
+      <li>Layout &amp; social design</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────── contact ───────── -->
+<footer class="contact" id="contact">
+  <p class="mono kicker">[ 05 — Contact ]</p>
+  <h2>Let’s <em>collaborate!</em></h2>
+  <p class="section-sub">Open to architecture internships, collaborations and editing work. No brief is too rough, and no idea is too small.</p>
+  <div class="contact-links">
+    <a class="pill" href="https://instagram.com/rollnumberninee" target="_blank" rel="noopener">Instagram · @rollnumberninee ↗</a>
+    <!-- add more, e.g. <a class="pill" href="mailto:you@example.com">you@example.com</a> -->
+  </div>
+  <div class="giant" aria-hidden="true">rollnumberninee</div>
+  <div class="fine mono"><span>© <span id="year"></span> Shahid Nazir Khan</span><a href="#top">Back to top ↑</a></div>
+</footer>
+
+<!-- ───────── folder window ───────── -->
+<div class="overlay" id="win" hidden>
+  <div class="window" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+    <div class="titlebar">
+      <span class="lights"><button class="light red" data-close aria-label="Close"></button><i class="light amber"></i><i class="light green"></i></span>
+      <span class="mono path" id="winPath"></span>
+      <button class="mono flip" id="flipBtn" hidden>▶ Play flipbook</button>
+    </div>
+    <div class="window-body">
+      <header class="window-head">
+        <h3 id="winTitle"></h3>
+        <p id="winDesc"></p>
+      </header>
+      <div class="flipbook" id="flipbook" hidden><img alt=""></div>
+      <div class="grid" id="winGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── lightbox ───────── -->
+<div class="lightbox" id="lb" hidden>
+  <button class="lb-btn lb-close" data-close aria-label="Close">✕</button>
+  <button class="lb-btn lb-prev" aria-label="Previous">←</button>
+  <figure><div class="lb-media" id="lbMedia"></div><figcaption class="mono" id="lbCap"></figcaption></figure>
+  <button class="lb-btn lb-next" aria-label="Next">→</button>
+</div>
+
+<script src="assets/manifest.js"></script>
+<script src="app.js"></script>
+<script src="cursor.js"></script>
+</body>
+</html>
