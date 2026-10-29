@@ -325,6 +325,9 @@ $('#showreel').addEventListener('click', () => openLightbox(M.reels, 0, 'Showree
   const update = () => {
     queued = false;
     root.style.setProperty('--bg-blur', Math.min(1, scrollY / (innerHeight * .6)).toFixed(3));
+    // parallax: the plastic travels 50px over the whole page, so it never runs out of bleed
+    const max = Math.max(1, root.scrollHeight - innerHeight);
+    root.style.setProperty('--bg-py', (-50 * scrollY / max).toFixed(1));
   };
   addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
   update();

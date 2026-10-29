@@ -41,23 +41,49 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 /* ── fixed site background ── */
 .site-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #050408; }
 .bg-layer {
-  position: absolute; inset: -48px;               /* bleed so the blur has no hard edges */
+  position: absolute; inset: -48px;               /* bleed so the blur and drift have no hard edges */
   background: url("assets/bg/plastic.jpg") center / cover no-repeat;
+  translate: 0 calc(var(--bg-py, 0) * 1px);       /* scroll parallax (kept separate from the drift) */
+  animation: bgDrift 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+/* slow pan / zoom / tilt; alternate makes the loop seamless */
+@keyframes bgDrift {
+  0%   { transform: translate3d(0, 0, 0)          scale(1.07) rotate(0deg); }
+  35%  { transform: translate3d(-2.2%, 1.4%, 0)   scale(1.12) rotate(-1.1deg); }
+  70%  { transform: translate3d(1.2%, 2%, 0)      scale(1.09) rotate(.6deg); }
+  100% { transform: translate3d(1.8%, -1.6%, 0)   scale(1.1)  rotate(1deg); }
 }
 .bg-sharp { filter: grayscale(1) contrast(1.18) brightness(.8); }
 .bg-soft {
   filter: grayscale(1) contrast(1.1) brightness(.68) blur(16px);
-  transform: scale(1.05);
   opacity: var(--bg-blur, 0);
+}
+/* a band of light that slides across the gloss now and then */
+.bg-sheen {
+  position: absolute; inset: 0; mix-blend-mode: overlay; pointer-events: none;
+  background: linear-gradient(112deg, transparent 38%, rgba(255,255,255,.0) 42%, rgba(255,255,255,.55) 50%, rgba(255,255,255,0) 58%, transparent 62%) 0 0 / 300% 100% no-repeat;
+  animation: sheen 11s cubic-bezier(.45,0,.25,1) infinite;
+  opacity: calc(1 - var(--bg-blur, 0) * .5);
+}
+@keyframes sheen {
+  0%   { background-position: 110% 0; }
+  55%  { background-position: -10% 0; }          /* band is off-screen at both ends, so the jump is invisible */
+  100% { background-position: -10% 0; }
 }
 /* palette grade: tints the plastic's highlights violet, with a hint of lime; black stays black */
 .bg-tint {
-  position: absolute; inset: 0; mix-blend-mode: color;
+  position: absolute; inset: -15%; mix-blend-mode: color;
+  animation: tintDrift 34s ease-in-out infinite alternate;
   background:
     radial-gradient(55% 55% at 82% 18%, rgba(125,57,235,.95), transparent 72%),
     radial-gradient(60% 55% at 8% 88%, rgba(125,57,235,.8), transparent 72%),
     radial-gradient(32% 28% at 58% 62%, rgba(198,255,51,.55), transparent 70%),
     linear-gradient(rgba(125,57,235,.35), rgba(125,57,235,.35));
+}
+@keyframes tintDrift {
+  from { transform: translate3d(0, 0, 0) rotate(0deg); }
+  to   { transform: translate3d(-6%, 5%, 0) rotate(8deg); }
 }
 .bg-dim { position: absolute; inset: 0; background: #050408; opacity: calc(.28 + var(--bg-blur, 0) * .22); }
 .bg-grain {

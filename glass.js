@@ -18,12 +18,17 @@ uniform sampler2D uTex;
 uniform float uHasTex;
 uniform vec4 uCover;     // fixed background image rect on screen, in CSS px: x, y, w, h
 uniform vec3 uFrame;     // canvas left, top (CSS px), device pixel ratio
+uniform vec4 uInv;       // inverse of the background layer's current 2x2 transform
+uniform vec4 uMove;      // xy: transform origin, zw: total translation (CSS px)
 
 float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
 
 // the black plastic, sampled where the fixed site background sits, graded to the palette
 vec3 plastic(vec2 p){
   vec2 css = vec2(uFrame.x + p.x / uFrame.z, uFrame.y + (uRes.y - p.y) / uFrame.z);
+  // undo the drifting/parallax transform so the glass refracts exactly what sits behind it
+  vec2 v = css - uMove.xy - uMove.zw;
+  css = uMove.xy + vec2(uInv.x * v.x + uInv.y * v.y, uInv.z * v.x + uInv.w * v.y);
   vec2 tuv = (css - uCover.xy) / uCover.zw;
   float l = dot(texture2D(uTex, tuv).rgb, vec3(0.30, 0.59, 0.11));
   l = clamp((l - 0.06) * 1.2, 0.0, 1.0);
@@ -135,6 +140,22 @@ void main(){
   const U = n => gl.getUniformLocation(prog, n);
   const uRes = U('uRes'), uTime = U('uTime'), uLight = U('uLight'), uFlute = U('uFlute');
   const uHasTex = U('uHasTex'), uCover = U('uCover'), uFrame = U('uFrame');
+  const uInv = U('uInv'), uMove = U('uMove');
+  const bgLayer = document.querySelector('.bg-sharp');
+
+  // current transform of the drifting background layer (CSS animation + scroll `translate`)
+  function layerMotion() {
+    let a = 1, b = 0, c = 0, d = 1, e = 0, f = 0;
+    if (bgLayer) {
+      const cs = getComputedStyle(bgLayer);
+      const m = cs.transform.match(/matrix\(([^)]+)\)/);
+      if (m) [a, b, c, d, e, f] = m[1].split(',').map(Number);
+      const t = cs.translate && cs.translate !== 'none' ? cs.translate.split(' ').map(parseFloat) : [];
+      e += t[0] || 0; f += t[1] || 0;
+    }
+    const det = a * d - b * c || 1;
+    return { inv: [d / det, -c / det, -b / det, a / det], move: [innerWidth / 2, innerHeight / 2, e, f] };
+  }
 
   // plastic texture (embedded data URI, so it isn't blocked on file://)
   const tex = gl.createTexture();
@@ -198,6 +219,9 @@ void main(){
     gl.uniform1f(uHasTex, hasTex);
     gl.uniform4f(uCover, ...cover());
     gl.uniform3f(uFrame, r.left, r.top, dpr);
+    const lm = layerMotion();
+    gl.uniform4f(uInv, ...lm.inv);
+    gl.uniform4f(uMove, ...lm.move);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
   function loop(now) {
