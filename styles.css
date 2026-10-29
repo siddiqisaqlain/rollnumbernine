@@ -176,29 +176,6 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 .hero-role em { color: var(--lime); font-size: 1.12em; }
 .hero .search { animation: fade 1s .5s both; }
 
-/* poster stream; app.js sets each poster's transform and opacity every frame */
-.floaters { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
-.fl {
-  position: absolute; left: 0; top: 0; height: auto; border-radius: 8px;
-  box-shadow: 0 24px 60px rgba(0,0,0,.5);
-  will-change: transform, opacity; opacity: 0;
-}
-
-/* showreel thumb, after daylight */
-.showreel {
-  position: absolute; right: clamp(14px, 2vw, 28px); bottom: clamp(14px, 2vw, 28px);
-  width: clamp(150px, 18vw, 260px); aspect-ratio: 16 / 10; padding: 0; overflow: hidden;
-  border: 2px solid var(--lime); border-radius: 14px; background: #111;
-  transition: transform .35s cubic-bezier(.2,.8,.2,1);
-}
-.showreel:hover { transform: scale(1.04); }
-.showreel video { width: 100%; height: 100%; object-fit: cover; }
-.showreel-play {
-  position: absolute; inset: 0; margin: auto; width: 44px; height: 44px; border-radius: 50%;
-  display: grid; place-items: center; background: var(--lime); color: var(--black); font-size: 14px;
-}
-.showreel-label { position: absolute; left: 10px; bottom: 8px; font-size: 11px; text-shadow: 0 1px 6px #000; }
-@media (max-width: 900px) { .showreel { display: none; } }
 
 /* meta row under the frame, after hadiya */
 .hero-meta {
