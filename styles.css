@@ -176,25 +176,12 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 .hero-role em { color: var(--lime); font-size: 1.12em; }
 .hero .search { animation: fade 1s .5s both; }
 
-/* floating cards with mouse parallax, after studio loop */
-.floaters { position: absolute; inset: 0; pointer-events: none; }
+/* poster stream; app.js sets each poster's transform and opacity every frame */
+.floaters { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
 .fl {
-  position: absolute; width: clamp(110px, 12vw, 190px); height: auto; border-radius: 8px;
+  position: absolute; left: 0; top: 0; height: auto; border-radius: 8px;
   box-shadow: 0 24px 60px rgba(0,0,0,.5);
-  transform: translate3d(var(--x, 0px), var(--y, 0px), 0) rotate(var(--r));
-  transition: transform .9s cubic-bezier(.2,.8,.2,1);
-  animation: floatIn 1.2s cubic-bezier(.2,.8,.2,1) both;
-}
-@keyframes floatIn { from { opacity: 0; translate: 0 60px; } }
-.fl-1 { --r: -9deg; right: 30%; top: 9%;  animation-delay: .2s; }
-.fl-2 { --r: 7deg;  right: 6%;  top: 6%;  animation-delay: .3s; width: clamp(130px, 15vw, 230px); }
-.fl-3 { --r: -4deg; right: 17%; top: 40%; animation-delay: .4s; width: clamp(140px, 16vw, 250px); }
-.fl-4 { --r: 11deg; right: 3%;  top: 52%; animation-delay: .5s; }
-.fl-5 { --r: -13deg; right: 36%; top: 47%; animation-delay: .6s; width: clamp(90px, 10vw, 160px); }
-@media (max-width: 900px) {
-  .fl { width: 96px !important; opacity: .85; }
-  .fl-1 { right: 42%; top: 6%; } .fl-2 { right: 6%; top: 4%; } .fl-3 { right: 22%; top: 18%; }
-  .fl-4, .fl-5 { display: none; }
+  will-change: transform, opacity; opacity: 0;
 }
 
 /* showreel thumb, after daylight */
