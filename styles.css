@@ -728,6 +728,9 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 .orbit .folder.hit .f-label strong { color: var(--lime); }
 .orbit .folder .f-label { text-align: center; text-shadow: 0 2px 12px rgba(0,0,0,.8); }
 .orbit .empty { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; }
+.orbit-set { position: absolute; inset: 0; }
+.desk-2 { margin-top: -90px; padding-top: 0; padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)); }   /* room for the dock */
+.folder-empty .f-front { justify-content: center; }
 .orbit .folder .f-label { transition: opacity .3s; }
 @media (max-width: 640px) {
   .orbit { height: 620px; }
