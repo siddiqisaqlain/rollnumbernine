@@ -223,6 +223,23 @@ if (desktop) {
   if (orbit) {
     const LAP = 45;                                   // seconds per revolution
     let angle = 0, speed = 1, target = 1, held = null, last = performance.now();
+
+    // words on the track: an ellipse path drawn counter-clockwise, so the text reads
+    // upright along the front edge and flips over at the back like a real band
+    const words = $('#orbitWords'), path = $('#orbitPath'), tp = $('#orbitText');
+    const PHRASE = 'My architectural work ✦ ';
+    let geom = '', unit = 1;
+    function shapeWords(W, H, rx, ry, dy) {
+      const key = [W, H, rx, ry, dy].map(Math.round).join();
+      if (key === geom) return;
+      geom = key;
+      const cx = W / 2, cy = H / 2 + dy;
+      words.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      path.setAttribute('d', `M ${cx - rx} ${cy} A ${rx} ${ry} 0 1 0 ${cx + rx} ${cy} A ${rx} ${ry} 0 1 0 ${cx - rx} ${cy}`);
+      tp.textContent = PHRASE;
+      unit = tp.getComputedTextLength() || 1;
+      tp.textContent = PHRASE.repeat(Math.ceil(path.getTotalLength() / unit) + 2);
+    }
     desktop.querySelectorAll('.folder').forEach(el => {
       const hold = () => { held = el; target = 0; };
       const release = () => { if (held === el) held = null; target = held ? 0 : 1; };
@@ -246,6 +263,10 @@ if (desktop) {
       orbit.style.setProperty('--rx', rx.toFixed(0));
       orbit.style.setProperty('--ry', ry.toFixed(0));
       orbit.style.setProperty('--track-dy', (fw * .3).toFixed(0));
+      shapeWords(W, H, rx, ry, fw * .3);
+      // slide the words at roughly the folders' speed, wrapping one phrase-length at a time
+      const travel = angle * (rx + ry) / 2;
+      tp.setAttribute('startOffset', (-unit - (travel % unit)).toFixed(1));
       els.forEach((el, i) => {
         const a = n === 1 ? Math.PI / 2 : angle + i * Math.PI * 2 / n;
         const z = Math.sin(a), d = (z + 1) / 2;              // d: 0 at the back, 1 at the front

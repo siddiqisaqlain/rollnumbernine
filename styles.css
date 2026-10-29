@@ -701,7 +701,37 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
 .desk .filter-state { margin: 10px 0 0; }
 
 /* folders ride an ellipse; app.js places each one every frame */
-.orbit { position: relative; height: clamp(500px, 56vw, 760px); margin-top: 10px; }
+.orbit { position: relative; height: clamp(500px, 56vw, 760px); margin-top: 10px; isolation: isolate; }
+
+/* words on the track */
+.orbit-words {
+  position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0;
+  /* the far side of the band fades into the distance */
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.12) 38%, #000 62%);
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,.12) 38%, #000 62%);
+}
+.orbit-words text {
+  font: 500 13px var(--mono); letter-spacing: .32em; text-transform: uppercase;
+  fill: var(--lime); opacity: .8;
+}
+
+/* title standing in the middle of the ring, at mid-depth (z 50) */
+.orbit-title {
+  position: absolute; left: 50%; top: 50%; z-index: 50; margin: 0;
+  transform: translate(-50%, -62%); text-align: center; pointer-events: none;
+  display: grid; justify-items: center; line-height: .82; white-space: nowrap;
+}
+.ot-small { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--lime); margin-bottom: 16px; }
+.ot-line {
+  font-weight: 900; font-stretch: 72%; text-transform: uppercase; letter-spacing: -.02em;
+  font-size: clamp(40px, 7.4vw, 118px);
+  color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,.85);
+  text-shadow: 0 0 40px rgba(125,57,235,.45);
+}
+.ot-work {
+  font-size: clamp(70px, 13vw, 210px); color: var(--lime); margin-top: -.12em;
+  text-shadow: 0 10px 60px rgba(198,255,51,.28), 0 2px 0 rgba(0,0,0,.25);
+}
 .orbit-track {
   position: absolute; left: 50%; top: 50%;
   width: calc(var(--rx, 400) * 2px); height: calc(var(--ry, 100) * 2px);
@@ -726,6 +756,10 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; }
   .orbit .folder .f-label strong { font-size: 13px; }
   .orbit .folder.is-back .f-label { opacity: 0; }
   .orbit .f-front { padding: 8px 9px; white-space: nowrap; }
+  .ot-line { font-size: 30px; -webkit-text-stroke-width: 1px; }
+  .ot-work { font-size: 64px; }
+  .ot-small { font-size: 10px; margin-bottom: 10px; }
+  .orbit-words text { font-size: 10px; letter-spacing: .24em; }
   .orbit .f-tag, .orbit .f-count { font-size: 9px; }
 }
 
